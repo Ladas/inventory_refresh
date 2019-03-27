@@ -176,7 +176,7 @@ module InventoryRefresh::SaveCollection
         records_for_destroy = []
         indexed_inventory_objects = {}
 
-        records_batch_iterator.find_in_batches(:batch_size => batch_size) do |batch|
+        records_batch_iterator.find_in_batches(:batch_size => batch_size, :attributes_index => attributes_index) do |batch|
           update_time = time_now
 
           batch.each do |record|

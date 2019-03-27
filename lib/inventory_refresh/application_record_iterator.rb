@@ -26,17 +26,17 @@ module InventoryRefresh
     #
     # @param batch_size [Integer] A batch size we want to fetch from DB
     # @yield Code processing the batches
-    def find_in_batches(batch_size: 1000)
+    def find_in_batches(batch_size: 1000, attributes_index: {})
       if iterator
         iterator.call do |batch|
           yield(batch)
         end
       elsif query
-        manager_uuids_set.each_slice(batch_size) do |batch|
+        attributes_index.each_slice(batch_size) do |batch|
           yield(query.where(inventory_collection.targeted_selection_for(batch)))
         end
       else
-        manager_uuids_set.each_slice(batch_size) do |batch|
+        attributes_index.each_slice(batch_size) do |batch|
           yield(inventory_collection.db_collection_for_comparison_for(batch))
         end
       end
